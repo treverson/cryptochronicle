@@ -19,7 +19,13 @@ var mainState = {
         // Load the jump sound
         game.load.audio('jump', 'assets/jump.wav'); 
         game.load.audio('bgm', 'assets/osanaiyuta_bgm_0001.mp3');
+
+        game.load.audio('voe01', 'assets/voe_voice/voe01.mp3'); 
+        game.load.audio('voe02', 'assets/voe_voice/voe02.mp3'); 
+        game.load.audio('voe03', 'assets/voe_voice/voe03.mp3'); 
+
         
+
     },
 
     create: function() { 
@@ -49,6 +55,17 @@ var mainState = {
         // Add the jump sound
         this.jumpSound = game.add.audio('jump');
         this.jumpSound.volume = 0.2;
+
+
+
+        this.voe01 = game.add.audio('voe01');
+        this.voe02 = game.add.audio('voe02');
+        this.voe03 = game.add.audio('voe03');
+
+        //game.sound.setDecodedCallback([ voe01, voe02, voe03 ], start, this);
+
+        
+
         
     },
 
@@ -62,6 +79,25 @@ var mainState = {
         // Slowly rotate the bird downward, up to a certain point.
         if (this.bird.angle < 20)
             this.bird.angle += 1;  
+    },
+
+    playVoe: function(num) {
+
+        switch (num)
+        {
+            case 0:
+            this.voe01.play();
+                break;
+    
+            case 1:
+            this.voe02.play();
+                break;
+    
+            case 2:
+            this.voe03.play();
+                break;
+        }
+    
     },
 
     jump: function() {
@@ -78,11 +114,19 @@ var mainState = {
         this.jumpSound.play();
     },
 
+    getRandomInt: function(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      },
+
     hitPipe: function() {
         // If the bird has already hit a pipe, we have nothing to do
 
         if (this.bird.alive == false)
             return;
+
+        //voe
+        var voe = this.getRandomInt(3);
+        this.playVoe(voe);
 
         //destroy bgm
         if(this.music) this.music.destroy();
