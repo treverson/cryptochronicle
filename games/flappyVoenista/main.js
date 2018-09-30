@@ -61,7 +61,7 @@ var mainState = {
         this.voe02 = game.add.audio('voe02');
         this.voe03 = game.add.audio('voe03');
 
-        game.sound.setDecodedCallback([ voe01, voe02, voe03 ], start, this);
+        //game.sound.setDecodedCallback([ voe01, voe02, voe03 ], start, this);
 
         
 
@@ -80,6 +80,25 @@ var mainState = {
             this.bird.angle += 1;  
     },
 
+    playVoe: function(num) {
+
+        switch (num)
+        {
+            case 0:
+            this.voe01.play();
+                break;
+    
+            case 1:
+            this.voe02.play();
+                break;
+    
+            case 2:
+            this.voe03.play();
+                break;
+        }
+    
+    },
+
     jump: function() {
         // If the bird is dead, he can't jump
         if (this.bird.alive == false)
@@ -94,11 +113,19 @@ var mainState = {
         this.jumpSound.play();
     },
 
+    getRandomInt: function(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      },
+
     hitPipe: function() {
         // If the bird has already hit a pipe, we have nothing to do
 
         if (this.bird.alive == false)
             return;
+
+        //voe
+        var voe = this.getRandomInt(3);
+        this.playVoe(voe);
 
         //destroy bgm
         if(this.music) this.music.destroy();
