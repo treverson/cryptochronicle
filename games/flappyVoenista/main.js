@@ -57,6 +57,7 @@ var mainState = {
         this.jumpSound.volume = 0.2;
 
 
+
         this.voe01 = game.add.audio('voe01');
         this.voe02 = game.add.audio('voe02');
         this.voe03 = game.add.audio('voe03');
@@ -170,6 +171,19 @@ var mainState = {
     
         this.score += 1;
         this.labelScore.text = this.score;  
+        contract.methods.add()
+        .send({ from: from })
+        .on("transactionHash", function (txhash) {
+            console.log(txhash);
+        })
+        .on("receipt", function (receipt) {
+            //Process when transaction is confirmed
+            console.log(receipt)
+        })
+        .on("error", function (error) {
+            //Process when transaction is failed
+            console.log(error)
+        });        
     },
 };
 

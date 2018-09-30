@@ -2,7 +2,7 @@
 This is open source voe game.
 
 # Game Demo
-https://ipfs.io/ipfs/QmZ9ndvHJUgsVpiQkS9smU4R2Bt7xzQ7Ln16ANBHnHw6J1
+https://ipfs.io/ipfs/QmbjQCZXBBHvHimGM2S7G2BNKjYWyj1rn6WVmUn52tHBdP
 
 # Story
 Voe is flying... as he goes...
