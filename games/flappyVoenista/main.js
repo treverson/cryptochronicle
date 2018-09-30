@@ -49,8 +49,6 @@ var mainState = {
         // Add the jump sound
         this.jumpSound = game.add.audio('jump');
         this.jumpSound.volume = 0.2;
-
-        
         
     },
 
@@ -129,6 +127,19 @@ var mainState = {
     
         this.score += 1;
         this.labelScore.text = this.score;  
+        contract.methods.add()
+        .send({ from: from })
+        .on("transactionHash", function (txhash) {
+            console.log(txhash);
+        })
+        .on("receipt", function (receipt) {
+            //Process when transaction is confirmed
+            console.log(receipt)
+        })
+        .on("error", function (error) {
+            //Process when transaction is failed
+            console.log(error)
+        });        
     },
 };
 
