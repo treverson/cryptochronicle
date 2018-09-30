@@ -19,12 +19,14 @@ var mainState = {
         // Load the jump sound
         game.load.audio('jump', 'assets/jump.wav'); 
         game.load.audio('bgm', 'assets/osanaiyuta_bgm_0001.mp3');
-        music = new Phaser.Sound(game,'bgm',1,true);
-        console.log(music)
-        music.play();  
+        
     },
 
     create: function() { 
+       
+        this.music = game.add.audio('bgm');
+        this.music.play("",0,1,true);
+
         game.physics.startSystem(Phaser.Physics.ARCADE);
     
         this.pipes = game.add.group();
@@ -47,6 +49,8 @@ var mainState = {
         // Add the jump sound
         this.jumpSound = game.add.audio('jump');
         this.jumpSound.volume = 0.2;
+
+        
         
     },
 
@@ -81,6 +85,9 @@ var mainState = {
 
         if (this.bird.alive == false)
             return;
+
+        //destroy bgm
+        if(this.music) this.music.destroy();
             
         // Set the alive property of the bird to false
         this.bird.alive = false;
@@ -95,6 +102,10 @@ var mainState = {
     },
 
     restartGame: function() {
+
+        //destroy bgm
+        if(this.music) this.music.destroy();
+        
         game.state.start('main');
         
     },
