@@ -19,6 +19,11 @@ var mainState = {
         // Load the jump sound
         game.load.audio('jump', 'assets/jump.wav'); 
         game.load.audio('bgm', 'assets/osanaiyuta_bgm_0001.mp3');
+        game.load.audio('voe01', 'assets/voe_voice/voe01.mp3'); 
+        game.load.audio('voe02', 'assets/voe_voice/voe02.mp3'); 
+        game.load.audio('voe03', 'assets/voe_voice/voe03.mp3'); 
+
+
         music = new Phaser.Sound(game,'bgm',1,true);
         console.log(music)
         music.play();  
@@ -47,6 +52,12 @@ var mainState = {
         // Add the jump sound
         this.jumpSound = game.add.audio('jump');
         this.jumpSound.volume = 0.2;
+
+        this.voe01 = game.add.audio('voe01');
+        this.voe02 = game.add.audio('voe02');
+        this.voe03 = game.add.audio('voe03');
+
+        game.sound.setDecodedCallback([ voe01, voe02, voe03 ], start, this);
         
     },
 
