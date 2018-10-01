@@ -97,9 +97,9 @@
       canvas.addEventListener('touchend', stopPlayer);   
 
       var load = function() {
-        // sprites.player = new Image();
-        // sprites.player.src = 'images/';
-
+        sprites.player = new Image();
+        sprites.player.src = 'images/ayaorlan_ropko.png';
+        
         // sprites.background = new Image();
         // sprites.background.src = 'images/';
 
@@ -200,9 +200,9 @@
         //ctx.drawImage(sprites.background, 0, 0);
 
         //draw player
-        //ctx.drawImage(sprites.player, player.x, player.y);
-         ctx.fillStyle = "#00FF00";
-        ctx.fillRect(player.x, player.y, player.w, player.h);
+        ctx.drawImage(sprites.player, player.x, player.y);
+        //ctx.fillStyle = "#00FF00";
+        //ctx.fillRect(player.x, player.y, player.w, player.h);
 
         //draw enemies
         // enemies.forEach(function(element, index){
