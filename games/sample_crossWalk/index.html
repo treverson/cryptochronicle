@@ -12,6 +12,13 @@
 <body>
   <h1>sample_crossWalk</h1>
   <canvas id="mycanvas" width="640" height="360" ></canvas>
+  <audio autoplay loop>
+    <source src="bgm/bgm.mp3">
+  </audio>
+  <audio id="hitSound" preload="auto">
+    <source src="bgm/voice.mp3" type="audio/mp3">
+  </audio>
+
   <script>
     window.addEventListener("load",function() {
       
@@ -167,6 +174,9 @@
           //check for collision with player
           if(checkCollision(player, element)) {
             //stop the game
+            document.getElementById("hitSound").currentTime = 0;
+            document.getElementById("hitSound").play();
+            
             gameLive = false;
 
             alert('Game Over!');
