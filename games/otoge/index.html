@@ -1,0 +1,285 @@
+<html>
+
+<head>
+    <title>otoge</title>
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0, maximum-scale = 1.0, minimum-scale=1.0, user-scalable=0,
+  minimal-ui" />
+    <style>
+    canvas {
+        border: 1px solid black;
+        
+    }
+    </style>
+</head>
+
+<body>
+    <canvas id="mycanvas" width="360" height="420" tabindex='1'></canvas>
+    <script>
+    window.addEventListener("load", function() {
+
+      //grab the canvas and context
+        var canvas = document.getElementById("mycanvas");
+        var ctx = canvas.getContext("2d");
+
+        //constants
+        var GAME_WIDTH = 360;
+        var GAME_HEIGHT = 420;
+
+        //keep the game going
+        var gameLive = true;
+        var beatArray = [];
+        var sprites = {};
+
+        var bar = {
+            w: GAME_WIDTH,
+            h: 40,
+            x: 0,
+            y: GAME_HEIGHT - 80,
+            color: "green",
+        }
+
+
+
+        var Beats = function(dir) {
+            var dirNum;
+            switch (dir) {
+                case "left":
+                    dirNum = 0
+                    break;
+                case "down":
+                    dirNum = 1
+                    break;
+                case "up":
+                    dirNum = 2
+                    break;
+                case "right":
+                    dirNum = 3
+                    break;
+                default:
+                dirNum = 0
+                break;
+            }
+
+            this.arrow = dir;
+            this.w = GAME_WIDTH / 4;
+            this.h = 40;
+            this.x = dirNum * this.w;
+            this.y = 0;
+            this.speed = 5;
+            this.color = "blue";
+        };
+
+            Beats.prototype.move = function(){
+                this.y += this.speed;
+            }
+
+            var beatMaker = function(dir) {
+            beatArray.push(new Beats(dir));
+        }
+
+        var score = {
+          num:0,
+          text: "Score:0",
+          color: "black",
+          x: canvas.width / 2,
+          y: 50,
+          font: "30px Arial",
+          align:"center"
+        }
+
+        //prevent keyDown scroll
+        window.addEventListener("keydown", function(e) {
+            // space and arrow keys
+            if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+
+        canvas.addEventListener('keydown', (event) => {
+            const keyName = event.key;
+
+            var arrow = "right"
+            var hit = false
+
+            switch (keyName) {
+                case "ArrowRight":
+                   arrow = "right"
+                    break;
+                case "ArrowDown":
+                    arrow = "down"
+                    break;
+                case "ArrowUp":
+                    arrow = "up"
+                    break;
+                case "ArrowLeft":
+                    arrow = "left"
+                    break;
+                  }
+
+                   for(var i = 0; i < beatArray.length; i++){
+                      if (checkCollision(bar,beatArray[i]) && beatArray[i].arrow == arrow){
+                        hit = true;
+                        score.num += 100;
+                        score.text = "Score:" + score.num;
+
+                        bar.color = "green";
+                        beatArray[i] = null;
+                        beatArray.splice(i,1);
+                        }
+                    }
+                if (!hit) {
+                if(score.num > 0) {
+                    score.num -= 100;
+                    score.text = "Score:" + score.num;
+                }
+                  bar.color = "red"}
+        });
+
+        var load = function() {
+            sprites.arrow = new Image();
+            sprites.arrow.src = 'images/arrow.png';
+
+            canvas.focus();
+            resizeGame();
+            window.addEventListener("resize", resizeGame);
+
+            
+
+            beatMaker("right");
+            beatMaker("left");
+            beatMaker("up");
+            beatMaker("down");
+
+            setInterval(function() {
+                beatMaker("right");
+            }, 1500);
+            setInterval(function() {
+                beatMaker("left");
+            }, 800);
+            setInterval(function() {
+                beatMaker("up");
+            }, 1500);
+            setInterval(function() {
+                beatMaker("down");
+            }, 1200);
+
+        };
+
+        //update the logic
+        var update = function() {
+            
+            for(var i = 0; i < beatArray.length; i++){
+                if(!beatArray[i]) continue;
+                if (beatArray[i].y > GAME_HEIGHT) {
+                }else{
+                 beatArray[i].move();
+                }
+
+            }
+
+        }
+
+
+        //show the game on the screen
+        var draw = function() {
+            //clear the canvas
+            ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+            ctx.fillStyle = score.color;
+            ctx.font = score.font;
+            ctx.textAlign = score.align;
+            ctx.fillText(score.text,score.x,score.y);
+
+            //draw background
+            //ctx.drawImage(sprites.background, 0, 0);
+
+            ctx.fillStyle = bar.color;
+            ctx.fillRect(bar.x, bar.y, bar.w, bar.h);
+
+            for(var i = 0; i < 4; i++){
+                //canvasだと画像回転させるのめんどくさかった、、
+            var angle;
+            if(i == 0) {angle = 270}
+            else if(i == 1) {angle = 180}
+            else if(i == 2) {angle = 0}
+            else if(i == 3) {angle = 90}
+
+            drawRotatedImage(sprites.arrow,i * GAME_WIDTH/4 + 50 , bar.y + 20, angle);
+           
+            }
+            
+
+            beatArray.forEach(function(element, index) {
+                
+                ctx.fillStyle = element.color;  
+                ctx.fillRect(element.x, element.y, element.w, element.h);
+            
+            });
+        }
+
+        var TO_RADIANS = Math.PI/180; 
+function drawRotatedImage(image, x, y, angle) { 
+ 
+    // save the current co-ordinate system 
+    // before we screw with it
+    ctx.save(); 
+ 
+    // move to the middle of where we want to draw our image
+    ctx.translate(x, y);
+ 
+    // rotate around that point, converting our 
+    // angle from degrees to radians 
+    ctx.rotate(angle * TO_RADIANS);
+ 
+    // draw it up and to the left by half the width
+    // and height of the image 
+    ctx.drawImage(image, -(image.width/2), -(image.height/2));
+ 
+    // and restore the co-ords to how they were when we began
+    ctx.restore(); 
+}
+
+
+        //gets executed multiple times per second
+        var step = function() {
+
+            update();
+            draw();
+
+            if (gameLive) {
+                window.requestAnimationFrame(step);
+            }
+        };
+
+        //check the collision between two rectangles
+        var checkCollision = function(rect1, rect2) {
+            var closeOnHeight = Math.abs(rect1.y - rect2.y) <= Math.max(rect1.h, rect2.h);
+            return closeOnHeight;
+        }
+
+        //initial kick
+        load();
+
+        step();
+
+
+        function resizeGame() {
+            var canvas = document.querySelector("canvas");
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+            var windowRatio = windowWidth / windowHeight;
+            var gameRatio = canvas.width / canvas.height;
+            if (windowRatio < gameRatio) {
+                canvas.style.width = windowWidth + "px";
+                canvas.style.height = (windowWidth / gameRatio) + "px";
+            } else {
+                canvas.style.width = (windowHeight * gameRatio) + "px";
+                canvas.style.height = windowHeight + "px";
+            }
+        }
+
+    });
+    </script>
+</body>
+
+</html>
