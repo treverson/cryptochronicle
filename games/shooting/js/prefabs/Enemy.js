@@ -8,7 +8,7 @@ SpaceHipster.Enemy = function(game, x, y, key, health, enemyBullets) {
   //enable physics
   //this.game.physics.arcade.enable(this);
   
-  this.animations.add('getHit', [0, 1, 2, 1, 0], 25, false);
+  //this.animations.add('getHit', [0, 1, 2, 1, 0], 25, false);
   this.anchor.setTo(0.5);
   this.health = health;
   
@@ -45,7 +45,7 @@ SpaceHipster.Enemy.prototype.update = function() {
 SpaceHipster.Enemy.prototype.damage = function(amount) {
   Phaser.Sprite.prototype.damage.call(this, amount);
   //play "getting hit" animation
-  this.play('getHit');
+  //this.play('getHit');
   
   //particle explosion
   if(this.health <= 0) {

@@ -24,12 +24,14 @@ SpaceHipster.GameState = {
   //load the game assets before the game starts
   preload: function() {
     this.load.image('space', 'assets/images/space.png');    
-    this.load.image('player', 'assets/images/player.png');    
+    this.load.image('player', 'assets/images/jiki.png');    
     this.load.image('bullet', 'assets/images/bullet.png');    
     this.load.image('enemyParticle', 'assets/images/enemyParticle.png');    
-    this.load.spritesheet('enemyA', 'assets/images/enemyA.png', 50, 46, 3, 1, 1);   
-    this.load.spritesheet('enemyB', 'assets/images/enemyB.png', 50, 46, 3, 1, 1);   
-    this.load.spritesheet('enemyC', 'assets/images/enemyC.png', 50, 46, 3, 1, 1);       
+    this.load.spritesheet('enemyA', 'assets/images/tekiki.png');
+    this.load.spritesheet('enemyB', 'assets/images/tekiki.png');
+    this.load.spritesheet('enemyC', 'assets/images/tekiki.png');   
+    
+    //this.load.spritesheet('enemyC', 'assets/images/enemyC.png', 50, 46, 3, 1, 1);       
     
     //load level data
     this.load.text('level1', 'assets/data/level1.json');
