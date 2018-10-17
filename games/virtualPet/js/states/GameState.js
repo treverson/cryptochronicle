@@ -1,11 +1,17 @@
 //this game will have only 1 state
 var GameState = {
 
+  init: function(amountOfCoin){
+    this.coin = amountOfCoin || 0;
+  },
+
   //executed after everything is loaded
-  create: function() {      
+  create: function(amountOfCoin) {      
     this.background = this.game.add.sprite(0, 0, 'backyard');
     this.background.inputEnabled = true;
     this.background.events.onInputDown.add(this.placeItem, this);
+
+    //////////// PET ////////////////
 
     this.pet = this.game.add.sprite(100, 400, 'pet');
     this.pet.anchor.setTo(0.5);
@@ -20,30 +26,13 @@ var GameState = {
     this.pet.inputEnabled = true;
     this.pet.input.enableDrag();
 
-    this.apple = this.game.add.sprite(72, 570, 'apple');
-    this.apple.anchor.setTo(0.5);
-    this.apple.inputEnabled = true;
-    this.apple.customParams = {health: 20};
-    this.apple.events.onInputDown.add(this.pickItem, this);
-
-    this.candy = this.game.add.sprite(144, 570, 'candy');
-    this.candy.anchor.setTo(0.5);
-    this.candy.inputEnabled = true;
-    this.candy.customParams = {health: -10, fun: 10};
-    this.candy.events.onInputDown.add(this.pickItem, this);
-
-    this.toy = this.game.add.sprite(216, 570, 'toy');
-    this.toy.anchor.setTo(0.5);
-    this.toy.inputEnabled = true;
-    this.toy.customParams = {fun: 20};
-    this.toy.events.onInputDown.add(this.pickItem, this);
-
-    this.rotate = this.game.add.sprite(288, 570, 'rotate');
-    this.rotate.anchor.setTo(0.5);
-    this.rotate.inputEnabled = true;
-    this.rotate.events.onInputDown.add(this.rotatePet, this);
-
-    this.buttons = [this.apple, this.candy, this.toy, this.rotate];
+    
+    ///////////// UI ////////////////////
+    this.itemData = JSON.parse(this.game.cache.getText('items'));
+    this.buttons = [];
+    for (i = 0; i < 4; i++){
+    this.itemInit(i);
+    }
 
     //nothing is selected
     this.selectedItem = null;
@@ -52,11 +41,27 @@ var GameState = {
     this.uiBlocked = false;
 
     var style = { font: '20px Arial', fill: '#fff'};
-    this.game.add.text(10, 20, 'Health:', style);
-    this.game.add.text(140, 20, 'Fun:', style);
 
-    this.healthText = this.game.add.text(80, 20, '', style);
-    this.funText = this.game.add.text(185, 20, '', style);
+    this.game.add.text(10,20,'Coin:',style);
+    this.coinText = this.game.add.text(60,20,'',style);
+    this.coinText.text = this.coin;
+
+    this.statusGroup = this.game.add.group();
+    this.statusGroup.y = 50;
+
+    this.game.add.text(10, 0, 'Health:', style,this.statusGroup);
+    this.game.add.text(140, 0, 'Fun:', style,this.statusGroup);
+
+    this.healthText = this.game.add.text(80, 0, '', style,this.statusGroup);
+    this.funText = this.game.add.text(185, 0, '', style,this.statusGroup);
+
+    this.shopButton = this.game.add.sprite(this.game.width - 75, 20, 'arrow');
+    this.shopButton.scale.setTo(0.5);
+    this.shopButton.inputEnabled = true;
+    this.shopButton.events.onInputDown.add(function(){
+      this.state.start('ShopState', true, false, this.coin);
+    }, this);
+
 
     this.refreshStats();
 
@@ -64,6 +69,29 @@ var GameState = {
     this.statsDecreaser = this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.reduceProperties, this);
 
   },
+
+  itemInit: function(id){
+
+    var style = { font: '20px Arial', fill: '#fff'};
+    
+    this.buttons[id] = this.game.add.sprite(this.itemData.leftMostItemX * (id + 1), this.itemData.itemsHeight, this.itemData.items[id].name);
+    this.buttons[id].anchor.setTo(0.5);
+    this.buttons[id].inputEnabled = true;
+    this.buttons[id].customParams = this.itemData.items[id];
+    if (this.itemData.items[id].name != "rotate"){
+    this.buttons[id].events.onInputDown.add(this.pickItem, this);
+    }else{
+    this.buttons[id].events.onInputDown.add(this.rotatePet, this);
+    }
+    this.buttons[id].num = this.itemData.items[i].num;
+    this.buttons[id].text = this.game.add.text(this.itemData.leftMostItemX * (id + 1), this.itemData.itemsHeight + 45, '', style);
+    this.buttons[id].text.anchor.setTo(0.5);
+    
+    this.itemIndex++;
+  },
+
+  // reduce number
+  // add(function) callback??
   pickItem: function(sprite, event) {
     
     //if the UI is blocked we can't pick an item
@@ -90,10 +118,14 @@ var GameState = {
       //alpha to indicate selection
       sprite.alpha = 0.4;
 
+      sprite.num --;
+
       var petRotation = this.game.add.tween(this.pet);
 
       //make the pet do two loops
       petRotation.to({angle: '+720'}, 1000);
+
+      this.refreshStats();
 
       petRotation.onComplete.add(function(){
         //release the UI
@@ -137,9 +169,14 @@ var GameState = {
 
       this.uiBlocked = true;
 
+      this.selectedItem.num --;
+
       //move the pet towards the item
       var petMovement = this.game.add.tween(this.pet);
       petMovement.to({x: x, y: y}, 700);
+
+      this.refreshStats();
+
       petMovement.onComplete.add(function(){
 
         //destroy the apple/candy/duck
@@ -173,6 +210,11 @@ var GameState = {
   refreshStats: function() {
     this.healthText.text = this.pet.customParams.health;
     this.funText.text = this.pet.customParams.fun;
+
+
+    for (i=0; i < this.buttons.length; i++){
+      this.buttons[i].text.text = this.buttons[i].num;
+    }
   },
   reduceProperties: function() {
     this.pet.customParams.health -= 10;

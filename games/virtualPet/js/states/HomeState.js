@@ -12,6 +12,9 @@ var HomeState = {
       this.state.start('GameState');
     }, this);
 
+    //for dev!!!
+    this.state.start('GameState');
+
     var style = {font: '35px Arial', fill: '#fff'};
     this.game.add.text(30, this.game.world.centerY + 200, 'TOUCH TO START', style);
   
