@@ -63,7 +63,7 @@ SpaceHipster.GameState = {
     //load level
     this.loadLevel();
     
-    this.bgm = this.add.audio('bgm');
+    this.bgm = this.add.audio('bgm',1,true);
     this.bgm.play();
   },
   update: function() {
@@ -130,7 +130,7 @@ SpaceHipster.GameState = {
   
   killPlayer: function() {
     this.player.kill();
-    //this.bgm.stop();
+    this.bgm.stop();
     this.game.state.start('GameState');
   },
   
@@ -156,7 +156,7 @@ SpaceHipster.GameState = {
     this.endOfLevelTimer = this.game.time.events.add(this.levelData.duration * 1000, function(){
       console.log('level ended!');
       
-      //this.bgm.stop();
+      this.bgm.stop();
       
       if(this.currentLevel < this.numLevels) {
         this.currentLevel++;
