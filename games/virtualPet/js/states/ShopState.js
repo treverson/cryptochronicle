@@ -2,10 +2,10 @@ var ShopState = {
 
     init: function(amountOfCoin) {
         this.coin = amountOfCoin;
-      },
+    },
     
-      create: function() {
-    
+    create: function() {
+        
         var background = this.game.add.sprite(0,0,'backyard');
         background.inputEnabled = true;
         

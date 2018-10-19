@@ -38,7 +38,7 @@ SpaceHipster.GameState = {
     this.load.text('level2', 'assets/data/level2.json');
     this.load.text('level3', 'assets/data/level3.json');
     
-    //this.load.audio('bgm', ['assets/audio/.mp3', 'assets/audio/.ogg']);
+    this.load.audio('bgm', ['assets/audio/shutting.mp3', 'assets/audio/shutting.ogg']);
   },
   //executed after everything is loaded
   create: function() {
@@ -63,8 +63,8 @@ SpaceHipster.GameState = {
     //load level
     this.loadLevel();
     
-    // this.bgm = this.add.audio('bgm');
-    // this.bgm.play();
+    this.bgm = this.add.audio('bgm');
+    this.bgm.play();
   },
   update: function() {
     
