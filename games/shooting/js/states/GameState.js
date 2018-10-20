@@ -78,7 +78,10 @@ SpaceHipster.GameState = {
     this.expShortSound = this.add.audio('exp_short');
     this.bulletSound = this.add.audio('bullet');
 
+    ///////// change volume 
+
     this.bulletSound.volume = 0.1;
+    this.attackSound.volume = 0.5;
   },
   update: function() {
     
