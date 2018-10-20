@@ -162,7 +162,7 @@ var mainState = {
         pipe.outOfBoundsKill = true;
     },
 
-    addRowOfPipes: function() {
+    addRowOfPipes: async function() {
         var hole = Math.floor(Math.random()*5)+1;
         
         for (var i = 0; i < 8; i++)
