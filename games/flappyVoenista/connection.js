@@ -29,7 +29,7 @@ var contractABI = [
 ];
 
 //Replace with your contract address
-var contractAddress = "0xb681fbf4b36c49e0811ee640cca1933ab57be81e";
+var contractAddress = "0x1a31b9b9d281d49001fe7f3f638000a739afc9c3";
 
 window.addEventListener(`load`, async function () {
         const privateKey = loom.CryptoUtils.generatePrivateKey()
@@ -48,6 +48,6 @@ window.addEventListener(`load`, async function () {
 		const web3 = new Web3(new loom.LoomProvider(client, privateKey))
 		
 
-		contract = new web3.eth.Contract(contractABI, contractAddress, { from })
+		contract = new web3.eth.Contract(contractABI, contractAddress, {from: from})
 		
 });
