@@ -174,7 +174,6 @@ var mainState = {
 
         await contract.methods.add().send()
         result = await contract.methods.get().call()
-        alert(result);
         this.labelScore.text = result;
         
     },
