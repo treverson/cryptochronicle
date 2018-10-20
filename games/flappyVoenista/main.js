@@ -173,7 +173,9 @@ var mainState = {
         //this.labelScore.text = this.score;  
 
         await contract.methods.add().send()
-        this.labelScore.text = await contract.methods.get().call()
+        result = await contract.methods.get().call()
+        alert(result);
+        this.labelScore.text = result;
         
     },
 };
