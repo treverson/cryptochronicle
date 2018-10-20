@@ -27,18 +27,25 @@ SpaceHipster.GameState = {
     this.load.image('player', 'assets/images/jiki.png');    
     this.load.image('bullet', 'assets/images/bullet.png');    
     this.load.image('enemyParticle', 'assets/images/enemyParticle.png');    
-    this.load.spritesheet('enemyA', 'assets/images/tekiki.png');
-    this.load.spritesheet('enemyB', 'assets/images/tekiki.png');
-    this.load.spritesheet('enemyC', 'assets/images/tekiki.png');   
-    
-    //this.load.spritesheet('enemyC', 'assets/images/enemyC.png', 50, 46, 3, 1, 1);       
+    // this.load.spritesheet('enemyA', 'assets/images/tekiki.png');
+    // this.load.spritesheet('enemyB', 'assets/images/tekiki.png');
+    // this.load.spritesheet('enemyC', 'assets/images/tekiki.png');   
+
+    this.load.spritesheet('enemyA', 'assets/images/enemyA.png', 50, 46, 3, 1, 1);       
+    this.load.spritesheet('enemyB', 'assets/images/enemyA.png', 50, 46, 3, 1, 1);       
+    this.load.spritesheet('enemyC', 'assets/images/enemyA.png', 50, 46, 3, 1, 1);       
     
     //load level data
     this.load.text('level1', 'assets/data/level1.json');
     this.load.text('level2', 'assets/data/level2.json');
     this.load.text('level3', 'assets/data/level3.json');
     
-    this.load.audio('bgm', ['assets/audio/shutting.mp3', 'assets/audio/shutting.ogg']);
+    this.load.audio('bgm', ['assets/audio/shutting.mp3', 'assets/audio/SE/shutting.ogg']);
+    this.load.audio('attack', ['assets/audio/SE/attack.mp3', 'assets/audio/SE/attack.ogg']);
+    this.load.audio('exp_long', ['assets/audio/SE/bakuhatsu_long.mp3', 'assets/audio/SE/bakuhatsu_long.ogg']);
+    this.load.audio('exp_short', ['assets/audio/SE/bakuhatsu_short.mp3', 'assets/audio/SE/bakuhatsu_short.ogg']);
+    this.load.audio('bullet', ['assets/audio/SE/tama.mp3', 'assets/audio/SE/tama.ogg']);
+
   },
   //executed after everything is loaded
   create: function() {
@@ -65,6 +72,13 @@ SpaceHipster.GameState = {
     
     this.bgm = this.add.audio('bgm',1,true);
     this.bgm.play();
+    
+    this.attackSound = this.add.audio('attack');
+    this.expLongSound = this.add.audio('exp_long');
+    this.expShortSound = this.add.audio('exp_short');
+    this.bulletSound = this.add.audio('bullet');
+
+    this.bulletSound.volume = 0.1;
   },
   update: function() {
     
@@ -97,6 +111,8 @@ SpaceHipster.GameState = {
   //create or reuse a bullet - pool of objects
   createPlayerBullet: function(){
     var bullet = this.playerBullets.getFirstExists(false);
+
+    this.bulletSound.play();
     
     //only create a bullet if there are no dead ones available to reuse
     if(!bullet) {
@@ -124,16 +140,29 @@ SpaceHipster.GameState = {
   },
   
   damageEnemy: function(bullet, enemy) {
+    this.attackSound.play();
     enemy.damage(1);    
     bullet.kill();
   },
   
   killPlayer: function() {
+    this.expLongSound.play();
+    this.game.time.events.remove(this.shootingTimer);
+    this.explode()
     this.player.kill();
     this.bgm.stop();
-    this.game.state.start('GameState');
+    this.game.time.events.add(2000, function() {this.game.state.start('GameState');}, this);
   },
-  
+
+  explode: function(){
+  var emitter = this.game.add.emitter(this.player.x, this.player.y, 100);
+    emitter.makeParticles('enemyParticle');
+    emitter.minParticleSpeed.setTo(-200, -200);
+    emitter.maxParticleSpeed.setTo(200, 200);
+    emitter.gravity = 0;
+    emitter.start(true, 500, null, 100);
+  },
+
   createEnemy: function(x, y, health, key, scale, speedX, speedY){
   
     var enemy = this.enemies.getFirstExists(false);
