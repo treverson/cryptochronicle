@@ -162,31 +162,20 @@ var mainState = {
         pipe.outOfBoundsKill = true;
     },
 
-    addRowOfPipes: function() {
+    addRowOfPipes: async function() {
         var hole = Math.floor(Math.random()*5)+1;
         
         for (var i = 0; i < 8; i++)
             if (i != hole && i != hole +1) 
                 this.addOnePipe(400, i*60+10);   
     
-        this.score += 1;
-        this.labelScore.text = this.score;  
+        //this.score += 1;
+        //this.labelScore.text = this.score;  
 
-        /*
-        contract.methods.add()
-        .send({ from: from })
-        .on("transactionHash", function (txhash) {
-            console.log(txhash);
-        })
-        .on("receipt", function (receipt) {
-            //Process when transaction is confirmed
-            console.log(receipt)
-        })
-        .on("error", function (error) {
-            //Process when transaction is failed
-            console.log(error)
-        });        
-        */
+        await contract.methods.add().send()
+        result = await contract.methods.get().call()
+        this.labelScore.text = result;
+        
     },
 };
 
