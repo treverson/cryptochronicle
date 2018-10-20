@@ -172,7 +172,7 @@ var mainState = {
         this.score += 1;
         this.labelScore.text = this.score;  
 
-        /*
+        
         contract.methods.add()
         .send({ from: from })
         .on("transactionHash", function (txhash) {
@@ -186,7 +186,7 @@ var mainState = {
             //Process when transaction is failed
             console.log(error)
         });        
-        */
+        
     },
 };
 
