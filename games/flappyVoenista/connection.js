@@ -38,8 +38,8 @@ window.addEventListener(`load`, async function () {
         const client = new loom.Client(
             'default',
             //This is public loom sandbox for cryptochronicles			
-            'ws://160.16.137.244:46657/websocket',
-            'ws://160.16.137.244:9999/queryws'
+            'ws://160.16.137.244:46658/queryws',
+            'ws://160.16.137.244:46658/queryws'
         )
 
 		from = loom.LocalAddress.fromPublicKey(publicKey).toString()
