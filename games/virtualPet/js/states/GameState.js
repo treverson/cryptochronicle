@@ -56,6 +56,8 @@ var GameState = {
     this.funText = this.game.add.text(185, 0, '', style,this.statusGroup);
 
     this.shopButton = this.game.add.sprite(this.game.width - 75, 20, 'arrow');
+
+    
     this.shopButton.scale.setTo(0.5);
     this.shopButton.inputEnabled = true;
     this.shopButton.events.onInputDown.add(function(){

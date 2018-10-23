@@ -169,12 +169,13 @@ var mainState = {
             if (i != hole && i != hole +1) 
                 this.addOnePipe(400, i*60+10);   
     
-        //this.score += 1;
-        //this.labelScore.text = this.score;  
+        this.score = 1;
+        this.labelScore.text = this.score;  
 
-        await contract.methods.add().send()
-        result = await contract.methods.get().call()
-        this.labelScore.text = result;
+        await contract.methods.set(2).send()
+
+        // result = await contract.methods.get().call()
+        // this.labelScore.text = result;
         
     },
 };
